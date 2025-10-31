@@ -13,7 +13,14 @@ def index():
     if not featured_products:
         featured_products = Product.query.filter_by(active=True).limit(12).all()
     
-    return render_template('index.html', categories=categories, products=featured_products, slides=slides)
+    category_products = {}
+    for category in categories:
+        category_products[category.id] = Product.query.filter_by(
+            category_id=category.id,
+            active=True
+        ).limit(6).all()
+    
+    return render_template('index.html', categories=categories, products=featured_products, slides=slides, category_products=category_products)
 
 @main_bp.route('/produto/<int:product_id>')
 def product_detail(product_id):
