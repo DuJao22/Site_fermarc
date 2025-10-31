@@ -186,8 +186,9 @@ def add_category():
     if request.method == 'POST':
         name = request.form.get('name')
         description = request.form.get('description')
+        image_url = request.form.get('image_url')
         
-        category = Category(name=name, description=description)
+        category = Category(name=name, description=description, image_url=image_url)
         db.session.add(category)
         db.session.commit()
         
@@ -205,6 +206,7 @@ def edit_category(category_id):
     if request.method == 'POST':
         category.name = request.form.get('name')
         category.description = request.form.get('description')
+        category.image_url = request.form.get('image_url')
         
         db.session.commit()
         

@@ -21,30 +21,14 @@
                     <i class="fa fa-chevron-right"></i>
                 </a>
                 
-                {% if category_products.get(category.id) %}
-                <div class="sidebar_submenu">
-                    <div class="submenu_header">
+                {% if category.image_url %}
+                <div class="category_image_hover">
+                    <img src="{{ category.image_url }}" alt="{{ category.name }}">
+                    <div class="category_overlay">
                         <h3>{{ category.name }}</h3>
-                        <a href="{{ url_for('main.category_products', category_id=category.id) }}" class="view_all_link">
-                            [ Ver Todos ]
+                        <a href="{{ url_for('main.category_products', category_id=category.id) }}" class="view_category_btn">
+                            Ver Produtos <i class="fa fa-arrow-right"></i>
                         </a>
-                    </div>
-                    <div class="submenu_products">
-                        {% for product in category_products[category.id] %}
-                        <div class="submenu_product">
-                            <a href="{{ url_for('main.product_detail', product_id=product.id) }}">
-                                {% if product.image_url %}
-                                <img src="{{ product.image_url }}" alt="{{ product.name }}">
-                                {% else %}
-                                <div class="submenu_product_noimage">
-                                    <i class="fa fa-microchip"></i>
-                                </div>
-                                {% endif %}
-                                <div class="submenu_product_name">{{ product.name }}</div>
-                                <div class="submenu_product_price">R$ {{ "%.2f"|format(product.price) }}</div>
-                            </a>
-                        </div>
-                        {% endfor %}
                     </div>
                 </div>
                 {% endif %}
