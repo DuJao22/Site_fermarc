@@ -9,7 +9,7 @@
     </h2>
     
     <div style="background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <form method="POST" action="{{ url_for('admin.edit_category', category_id=category.id) }}">
+        <form method="POST" action="{{ url_for('admin.edit_category', category_id=category.id) }}" enctype="multipart/form-data">
             <div style="margin-bottom: 20px;">
                 <label for="name" style="display: block; margin-bottom: 5px; font-weight: 600;">Nome da Categoria:</label>
                 <input type="text" id="name" name="name" value="{{ category.name }}" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
@@ -20,15 +20,45 @@
                 <textarea id="description" name="description" rows="4" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">{{ category.description }}</textarea>
             </div>
             
-            <div style="margin-bottom: 30px;">
-                <label for="image_url" style="display: block; margin-bottom: 5px; font-weight: 600;">URL da Imagem:</label>
-                <input type="url" id="image_url" name="image_url" value="{{ category.image_url or '' }}" placeholder="https://exemplo.com/imagem.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
-                <small style="color: #666; display: block; margin-top: 5px;">Adicione uma URL de imagem representativa para esta categoria</small>
+            <div style="margin-bottom: 20px;">
+                <label style="display: block; margin-bottom: 10px; font-weight: 600;">
+                    <i class="fa fa-image"></i> Imagem da Categoria:
+                </label>
+                
                 {% if category.image_url %}
-                <div style="margin-top: 10px;">
-                    <img src="{{ category.image_url }}" alt="{{ category.name }}" style="max-width: 200px; max-height: 150px; border: 1px solid #ddd; border-radius: 4px; padding: 5px;">
+                <div style="margin-bottom: 15px; padding: 15px; background: #f9f9f9; border-radius: 8px; border: 1px solid #ddd;">
+                    <p style="margin: 0 0 10px 0; font-weight: 600; color: #333;">
+                        <i class="fa fa-check-circle" style="color: #00C851;"></i> Imagem Atual:
+                    </p>
+                    <img src="{{ category.image_url }}" alt="{{ category.name }}" style="max-width: 100%; max-height: 200px; border: 1px solid #ddd; border-radius: 4px; padding: 5px; background: #fff;">
                 </div>
                 {% endif %}
+                
+                <div style="background: #f5f5f5; padding: 20px; border-radius: 8px; border: 2px dashed #ddd;">
+                    <div style="margin-bottom: 15px;">
+                        <label for="image_file" style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                            📤 Fazer Upload de Nova Imagem:
+                        </label>
+                        <input type="file" id="image_file" name="image_file" accept="image/*" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px; background: #fff;">
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            <i class="fa fa-info-circle"></i> Faça upload de uma nova imagem (JPG, PNG, GIF)
+                        </small>
+                    </div>
+                    
+                    <div style="text-align: center; margin: 15px 0; color: #999;">
+                        <strong>OU</strong>
+                    </div>
+                    
+                    <div>
+                        <label for="image_url" style="display: block; margin-bottom: 8px; font-weight: 600; color: #333;">
+                            🔗 URL da Imagem:
+                        </label>
+                        <input type="url" id="image_url" name="image_url" value="{{ category.image_url or '' }}" placeholder="https://exemplo.com/imagem.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px; background: #fff;">
+                        <small style="color: #666; display: block; margin-top: 5px;">
+                            <i class="fa fa-info-circle"></i> Ou cole uma URL de imagem externa
+                        </small>
+                    </div>
+                </div>
             </div>
             
             <div style="display: flex; gap: 10px;">

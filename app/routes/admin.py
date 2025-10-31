@@ -2,9 +2,12 @@ from flask import Blueprint, render_template, redirect, url_for, flash, request
 from flask_login import login_required, current_user
 from functools import wraps
 from sqlalchemy import or_
+from werkzeug.utils import secure_filename
 from app import db
 from app.models import Product, Category, Order, User, Coupon, StoreSettings, Slide
 from datetime import datetime
+import os
+import secrets
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
 
@@ -188,6 +191,30 @@ def add_category():
         description = request.form.get('description')
         image_url = request.form.get('image_url')
         
+        # Processar upload de imagem
+        if 'image_file' in request.files:
+            file = request.files['image_file']
+            if file and file.filename:
+                # Gerar nome seguro para o arquivo
+                filename = secure_filename(file.filename)
+                file_ext = os.path.splitext(filename)[1].lower()
+                
+                # Validar extensão
+                allowed_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
+                if file_ext in allowed_extensions:
+                    # Gerar nome único
+                    unique_filename = f"category_{secrets.token_hex(8)}{file_ext}"
+                    
+                    # Salvar arquivo
+                    upload_path = os.path.join('app', 'static', 'images', unique_filename)
+                    file.save(upload_path)
+                    
+                    # Atualizar image_url com o caminho do arquivo
+                    image_url = f'/static/images/{unique_filename}'
+                else:
+                    flash('Formato de imagem não permitido! Use JPG, PNG, GIF ou WEBP.', 'danger')
+                    return redirect(url_for('admin.add_category'))
+        
         category = Category(name=name, description=description, image_url=image_url)
         db.session.add(category)
         db.session.commit()
@@ -206,7 +233,36 @@ def edit_category(category_id):
     if request.method == 'POST':
         category.name = request.form.get('name')
         category.description = request.form.get('description')
-        category.image_url = request.form.get('image_url')
+        
+        # Processar upload de nova imagem
+        if 'image_file' in request.files:
+            file = request.files['image_file']
+            if file and file.filename:
+                # Gerar nome seguro para o arquivo
+                filename = secure_filename(file.filename)
+                file_ext = os.path.splitext(filename)[1].lower()
+                
+                # Validar extensão
+                allowed_extensions = {'.jpg', '.jpeg', '.png', '.gif', '.webp'}
+                if file_ext in allowed_extensions:
+                    # Gerar nome único
+                    unique_filename = f"category_{secrets.token_hex(8)}{file_ext}"
+                    
+                    # Salvar arquivo
+                    upload_path = os.path.join('app', 'static', 'images', unique_filename)
+                    file.save(upload_path)
+                    
+                    # Atualizar image_url com o caminho do arquivo
+                    category.image_url = f'/static/images/{unique_filename}'
+                else:
+                    flash('Formato de imagem não permitido! Use JPG, PNG, GIF ou WEBP.', 'danger')
+                    return redirect(url_for('admin.edit_category', category_id=category_id))
+        
+        # Se não houver upload, verificar se há URL
+        if not category.image_url or request.form.get('image_url'):
+            image_url = request.form.get('image_url')
+            if image_url:
+                category.image_url = image_url
         
         db.session.commit()
         
