@@ -137,7 +137,21 @@ O sistema está configurado para rodar automaticamente no Replit. Basta acessar 
 - Hash seguro de senhas
 - Gerenciamento de sessões
 
+## Replit Environment Setup
+- **Python Version**: 3.11
+- **Dependencies**: All packages from requirements.txt installed
+- **Workflow**: Flask development server on port 5000
+- **Host**: Configured for 0.0.0.0 to work with Replit proxy
+- **Database**: SQLite (instance/ecommerce.db)
+
 ## Recent Changes
+- **2025-10-31 (Replit Setup)**: Project configured for Replit environment
+  - ✅ Python 3.11 installed
+  - ✅ All dependencies installed from requirements.txt
+  - ✅ .gitignore created for Python projects
+  - ✅ Workflow configured for Flask development server
+  - ✅ Ready to run in Replit environment
+
 - **2025-10-31 (Integração Mercado Pago + Sistema de Entrega)**: Nova funcionalidade de checkout e pagamento
   - ✅ Sistema de escolha entre retirada no local ou entrega
   - ✅ Modelo Order expandido com campos: delivery_type, delivery_address, customer_name, customer_phone, shipping_cost, payment_status, payment_id
