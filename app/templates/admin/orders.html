@@ -9,12 +9,15 @@
     </h2>
     
     {% if orders %}
-    <div style="background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
-        <table style="width: 100%; border-collapse: collapse;">
+    <div style="background: #fff; border-radius: 8px; overflow-x: auto; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <table style="width: 100%; border-collapse: collapse; min-width: 1000px;">
             <thead style="background: var(--color-red); color: #fff;">
                 <tr>
                     <th style="padding: 15px; text-align: left;">ID</th>
                     <th style="padding: 15px; text-align: left;">Cliente</th>
+                    <th style="padding: 15px; text-align: left;">CPF</th>
+                    <th style="padding: 15px; text-align: left;">Telefone</th>
+                    <th style="padding: 15px; text-align: left;">Email</th>
                     <th style="padding: 15px; text-align: center;">Total</th>
                     <th style="padding: 15px; text-align: center;">Status</th>
                     <th style="padding: 15px; text-align: center;">Data</th>
@@ -24,17 +27,39 @@
             <tbody>
                 {% for order in orders %}
                 <tr style="border-bottom: 1px solid #e0e0e0;">
-                    <td style="padding: 15px;">#{{ order.id }}</td>
-                    <td style="padding: 15px;">{{ order.user.username }}</td>
-                    <td style="padding: 15px; text-align: center; font-weight: 700; color: var(--color-red);">R$ {{ "%.2f"|format(order.total) }}</td>
+                    <td style="padding: 15px; font-weight: 600;">#{{ order.id }}</td>
+                    <td style="padding: 15px;">
+                        <div style="font-weight: 600;">{{ order.user.username }}</div>
+                        {% if order.customer_name and order.customer_name != order.user.username %}
+                        <div style="font-size: 12px; color: #666; margin-top: 2px;">{{ order.customer_name }}</div>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 15px;">
+                        {% if order.user.cpf %}
+                        <span style="font-size: 13px;">{{ order.user.cpf }}</span>
+                        {% else %}
+                        <span style="color: #999; font-size: 12px;">Não informado</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 15px;">
+                        {% if order.customer_phone %}
+                        <span style="font-size: 13px;">{{ order.customer_phone }}</span>
+                        {% elif order.user.phone %}
+                        <span style="font-size: 13px;">{{ order.user.phone }}</span>
+                        {% else %}
+                        <span style="color: #999; font-size: 12px;">Não informado</span>
+                        {% endif %}
+                    </td>
+                    <td style="padding: 15px; font-size: 13px;">{{ order.user.email }}</td>
+                    <td style="padding: 15px; text-align: center; font-weight: 700; color: var(--color-red); font-size: 16px;">R$ {{ "%.2f"|format(order.total) }}</td>
                     <td style="padding: 15px; text-align: center;">
-                        <span style="padding: 5px 15px; background: {% if order.status == 'Confirmado' %}#d4edda{% elif order.status == 'Enviado' %}#d1ecf1{% else %}#fff3cd{% endif %}; color: {% if order.status == 'Confirmado' %}#155724{% elif order.status == 'Enviado' %}#0c5460{% else %}#856404{% endif %}; border-radius: 15px; font-size: 12px; font-weight: 600;">
+                        <span style="padding: 6px 16px; background: {% if order.status == 'Confirmado' %}#d4edda{% elif order.status == 'Enviado' %}#d1ecf1{% elif order.status == 'Entregue' %}#d4edda{% elif order.status == 'Cancelado' %}#f8d7da{% else %}#fff3cd{% endif %}; color: {% if order.status == 'Confirmado' %}#155724{% elif order.status == 'Enviado' %}#0c5460{% elif order.status == 'Entregue' %}#155724{% elif order.status == 'Cancelado' %}#721c24{% else %}#856404{% endif %}; border-radius: 20px; font-size: 12px; font-weight: 700; text-transform: uppercase;">
                             {{ order.status }}
                         </span>
                     </td>
-                    <td style="padding: 15px; text-align: center;">{{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td style="padding: 15px; text-align: center; font-size: 13px; white-space: nowrap;">{{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
                     <td style="padding: 15px; text-align: center;">
-                        <a href="{{ url_for('admin.order_detail', order_id=order.id) }}" style="color: var(--color-red); text-decoration: none; font-weight: 600;">
+                        <a href="{{ url_for('admin.order_detail', order_id=order.id) }}" style="color: #fff; background: var(--color-red); padding: 8px 16px; border-radius: 5px; text-decoration: none; font-weight: 600; font-size: 13px; display: inline-block; transition: background 0.3s;">
                             <i class="fa fa-eye"></i> Ver Detalhes
                         </a>
                     </td>

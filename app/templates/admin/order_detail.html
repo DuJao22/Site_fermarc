@@ -11,22 +11,79 @@
     <div style="background: #fff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; padding-bottom: 30px; border-bottom: 2px solid #e0e0e0;">
             <div>
-                <h3 style="font-size: 18px; margin-bottom: 15px; color: #111;">Informações do Cliente</h3>
-                <p style="margin-bottom: 10px;"><strong>Nome:</strong> {{ order.user.username }}</p>
-                <p style="margin-bottom: 10px;"><strong>Email:</strong> {{ order.user.email }}</p>
+                <h3 style="font-size: 18px; margin-bottom: 15px; color: var(--color-red); border-bottom: 2px solid var(--color-red); padding-bottom: 8px;">
+                    <i class="fa fa-user"></i> Informações do Cliente
+                </h3>
+                <div style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
+                    <p style="margin-bottom: 12px;">
+                        <strong style="display: inline-block; width: 100px; color: #555;">Nome:</strong> 
+                        <span style="color: #111;">{{ order.user.username }}</span>
+                    </p>
+                    {% if order.user.cpf %}
+                    <p style="margin-bottom: 12px;">
+                        <strong style="display: inline-block; width: 100px; color: #555;">CPF:</strong> 
+                        <span style="color: #111;">{{ order.user.cpf }}</span>
+                    </p>
+                    {% endif %}
+                    <p style="margin-bottom: 12px;">
+                        <strong style="display: inline-block; width: 100px; color: #555;">Email:</strong> 
+                        <span style="color: #111;">{{ order.user.email }}</span>
+                    </p>
+                    {% if order.user.phone or order.customer_phone %}
+                    <p style="margin-bottom: 12px;">
+                        <strong style="display: inline-block; width: 100px; color: #555;">Telefone:</strong> 
+                        <span style="color: #111;">{{ order.customer_phone or order.user.phone }}</span>
+                    </p>
+                    {% endif %}
+                </div>
             </div>
             <div>
-                <h3 style="font-size: 18px; margin-bottom: 15px; color: #111;">Informações do Pedido</h3>
-                <p style="margin-bottom: 10px;"><strong>Data:</strong> {{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
-                <p style="margin-bottom: 10px;"><strong>Total:</strong> <span style="color: var(--color-red); font-weight: 700; font-size: 20px;">R$ {{ "%.2f"|format(order.total) }}</span></p>
-                <p style="margin-bottom: 10px;">
-                    <strong>Status:</strong>
-                    <span style="padding: 5px 15px; background: {% if order.status == 'Confirmado' %}#d4edda{% elif order.status == 'Enviado' %}#d1ecf1{% else %}#fff3cd{% endif %}; color: {% if order.status == 'Confirmado' %}#155724{% elif order.status == 'Enviado' %}#0c5460{% else %}#856404{% endif %}; border-radius: 15px; font-size: 12px; font-weight: 600;">
-                        {{ order.status }}
-                    </span>
-                </p>
+                <h3 style="font-size: 18px; margin-bottom: 15px; color: var(--color-red); border-bottom: 2px solid var(--color-red); padding-bottom: 8px;">
+                    <i class="fa fa-shopping-cart"></i> Informações do Pedido
+                </h3>
+                <div style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
+                    <p style="margin-bottom: 12px;">
+                        <strong style="display: inline-block; width: 120px; color: #555;">Número:</strong> 
+                        <span style="color: #111; font-weight: 700;">#{{ order.id }}</span>
+                    </p>
+                    <p style="margin-bottom: 12px;">
+                        <strong style="display: inline-block; width: 120px; color: #555;">Data:</strong> 
+                        <span style="color: #111;">{{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</span>
+                    </p>
+                    <p style="margin-bottom: 12px;">
+                        <strong style="display: inline-block; width: 120px; color: #555;">Tipo Entrega:</strong> 
+                        <span style="color: #111;">{{ 'Retirada' if order.delivery_type == 'pickup' else 'Entrega' }}</span>
+                    </p>
+                    <p style="margin-bottom: 12px;">
+                        <strong style="display: inline-block; width: 120px; color: #555;">Total:</strong> 
+                        <span style="color: var(--color-red); font-weight: 700; font-size: 22px;">R$ {{ "%.2f"|format(order.total) }}</span>
+                    </p>
+                    <p style="margin-bottom: 0;">
+                        <strong style="display: inline-block; width: 120px; color: #555;">Status:</strong>
+                        <span style="padding: 6px 16px; background: {% if order.status == 'Confirmado' %}#d4edda{% elif order.status == 'Enviado' %}#d1ecf1{% elif order.status == 'Entregue' %}#d4edda{% elif order.status == 'Cancelado' %}#f8d7da{% else %}#fff3cd{% endif %}; color: {% if order.status == 'Confirmado' %}#155724{% elif order.status == 'Enviado' %}#0c5460{% elif order.status == 'Entregue' %}#155724{% elif order.status == 'Cancelado' %}#721c24{% else %}#856404{% endif %}; border-radius: 20px; font-size: 13px; font-weight: 700; text-transform: uppercase;">
+                            {{ order.status }}
+                        </span>
+                    </p>
+                </div>
             </div>
         </div>
+        
+        {% if order.delivery_address and order.delivery_type == 'delivery' %}
+        <div style="margin-bottom: 30px; padding-bottom: 30px; border-bottom: 2px solid #e0e0e0;">
+            <h3 style="font-size: 18px; margin-bottom: 15px; color: var(--color-red); border-bottom: 2px solid var(--color-red); padding-bottom: 8px;">
+                <i class="fa fa-map-marker"></i> Endereço de Entrega
+            </h3>
+            <div style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
+                <p style="color: #111; line-height: 1.6; font-size: 14px;">{{ order.delivery_address }}</p>
+                {% if order.shipping_cost and order.shipping_cost > 0 %}
+                <p style="margin-top: 12px; padding-top: 12px; border-top: 1px solid #ddd;">
+                    <strong style="color: #555;">Frete:</strong> 
+                    <span style="color: var(--color-red); font-weight: 600;">R$ {{ "%.2f"|format(order.shipping_cost) }}</span>
+                </p>
+                {% endif %}
+            </div>
+        </div>
+        {% endif %}
         
         <h3 style="font-size: 18px; margin-bottom: 15px; color: #111;">Itens do Pedido</h3>
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
