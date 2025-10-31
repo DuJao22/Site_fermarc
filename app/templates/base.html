@@ -29,8 +29,41 @@
         </div>
     </nav>
 
+    <!-- Menu Mobile -->
+    <div class="mobile-menu-overlay" id="mobileMenuOverlay"></div>
+    <div class="mobile-menu" id="mobileMenu">
+        <div class="mobile-menu-header">
+            <h2><i class="fa fa-bars"></i> Menu</h2>
+            <button class="mobile-menu-close" id="mobileMenuClose">
+                <i class="fa fa-times"></i>
+            </button>
+        </div>
+        <nav class="mobile-menu-nav">
+            <ul>
+                <li><a href="{{ url_for('main.index') }}"><i class="fa fa-home"></i> Início</a></li>
+                <li><a href="{{ url_for('main.index') }}#produtos"><i class="fa fa-shopping-bag"></i> Produtos</a></li>
+                {% if current_user.is_authenticated %}
+                    <li><a href="{{ url_for('cart.view_cart') }}"><i class="fa fa-shopping-cart"></i> Carrinho</a></li>
+                    <li><a href="{{ url_for('cart.my_orders') }}"><i class="fa fa-list"></i> Meus Pedidos</a></li>
+                    {% if current_user.is_admin %}
+                        <li><a href="{{ url_for('admin.dashboard') }}"><i class="fa fa-user-secret"></i> Admin</a></li>
+                    {% endif %}
+                    <li><a href="{{ url_for('auth.logout') }}"><i class="fa fa-sign-out"></i> Sair</a></li>
+                {% else %}
+                    <li><a href="{{ url_for('auth.login') }}"><i class="fa fa-user"></i> Login</a></li>
+                    <li><a href="{{ url_for('auth.register') }}"><i class="fa fa-user-plus"></i> Cadastrar</a></li>
+                {% endif %}
+                <li><a href="#contato"><i class="fa fa-envelope"></i> Contato</a></li>
+            </ul>
+        </nav>
+    </div>
+
     <header class="header_main">
         <div class="header_main_container">
+            <button class="mobile-menu-toggle" id="mobileMenuToggle">
+                <i class="fa fa-bars"></i>
+            </button>
+            
             <a href="{{ url_for('main.index') }}" class="logo">
                 <img src="https://cdn.awsli.com.br/400x300/95/95881/logo/logo-roboticar-qrdwja.png" alt="Fermarc Robótica" style="height: 50px;">
             </a>
@@ -167,6 +200,51 @@
             </div>
         </div>
     </footer>
+
+    <script>
+        // Menu Hamburguer Mobile
+        const mobileMenuToggle = document.getElementById('mobileMenuToggle');
+        const mobileMenu = document.getElementById('mobileMenu');
+        const mobileMenuClose = document.getElementById('mobileMenuClose');
+        const mobileMenuOverlay = document.getElementById('mobileMenuOverlay');
+
+        function openMobileMenu() {
+            mobileMenu.classList.add('active');
+            mobileMenuOverlay.classList.add('active');
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeMobileMenu() {
+            mobileMenu.classList.remove('active');
+            mobileMenuOverlay.classList.remove('active');
+            document.body.style.overflow = '';
+        }
+
+        if (mobileMenuToggle) {
+            mobileMenuToggle.addEventListener('click', openMobileMenu);
+        }
+
+        if (mobileMenuClose) {
+            mobileMenuClose.addEventListener('click', closeMobileMenu);
+        }
+
+        if (mobileMenuOverlay) {
+            mobileMenuOverlay.addEventListener('click', closeMobileMenu);
+        }
+
+        // Fechar menu ao clicar em um link
+        const mobileMenuLinks = document.querySelectorAll('.mobile-menu-nav a');
+        mobileMenuLinks.forEach(link => {
+            link.addEventListener('click', closeMobileMenu);
+        });
+
+        // Fechar menu ao pressionar ESC
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape' && mobileMenu.classList.contains('active')) {
+                closeMobileMenu();
+            }
+        });
+    </script>
 
     {% block extra_js %}{% endblock %}
 </body>
