@@ -58,6 +58,8 @@ Plataforma completa de e-commerce desenvolvida com Python Flask, SQLite3, HTML, 
 - ✅ Produtos em destaque
 - ✅ Imagens de produtos
 - ✅ Controle de estoque
+- ✅ **NOVO**: Imagens nas categorias exibidas no hover
+- ✅ **NOVO**: Efeito visual com overlay nas categorias
 
 ### Carrinho de Compras
 - ✅ Adicionar/remover produtos
@@ -80,7 +82,7 @@ Plataforma completa de e-commerce desenvolvida com Python Flask, SQLite3, HTML, 
 ### Painel Administrativo
 - ✅ Dashboard com estatísticas
 - ✅ CRUD completo de produtos
-- ✅ CRUD completo de categorias
+- ✅ CRUD completo de categorias (com imagens)
 - ✅ Gerenciamento de pedidos com informações completas
 - ✅ Atualização de status de pedidos
 - ✅ Controle de estoque
@@ -88,9 +90,9 @@ Plataforma completa de e-commerce desenvolvida com Python Flask, SQLite3, HTML, 
 - ✅ CRUD completo de cupons de desconto
 - ✅ Gerenciamento de validade e usos de cupons
 - ✅ Gerenciamento de slides do carrossel principal
-- ✅ **NOVO**: Visualização completa de pedidos com CPF, telefone e endereço
-- ✅ **NOVO**: Página de detalhes do pedido com todas as informações do cliente
-- ✅ **NOVO**: Interface profissional e organizada para gerenciar pedidos
+- ✅ Visualização completa de pedidos com CPF, telefone e endereço
+- ✅ Página de detalhes do pedido com todas as informações do cliente
+- ✅ Interface profissional e organizada para gerenciar pedidos
 
 ### Wishlist (Lista de Desejos) - NOVO
 - ✅ Adicionar produtos à lista de desejos
@@ -152,6 +154,16 @@ O sistema está configurado para rodar automaticamente no Replit. Basta acessar 
 - **Database**: SQLite (instance/ecommerce.db)
 
 ## Recent Changes
+- **2025-10-31 (Imagens nas Categorias)**: Sistema de hover com imagens nas categorias
+  - ✅ Campo image_url adicionado ao modelo Category
+  - ✅ Imagens ilustrativas baixadas para todas as 8 categorias
+  - ✅ HTML modificado para exibir imagem da categoria no hover (ao invés de lista de produtos)
+  - ✅ CSS estilizado com overlay e efeito visual profissional
+  - ✅ Formulários de admin atualizados para adicionar/editar imagens de categorias
+  - ✅ Rotas de admin processam campo image_url
+  - ✅ Banco de dados migrado com sucesso (ALTER TABLE category)
+  - ✅ Todas as categorias atualizadas com imagens representativas
+
 - **2025-10-31 (Melhorias no Admin e Cadastro)**: Novas funcionalidades de gerenciamento de clientes
   - ✅ Campo CPF adicionado ao cadastro de clientes com validação e máscara automática
   - ✅ Campo Telefone adicionado ao cadastro de clientes com máscara automática
