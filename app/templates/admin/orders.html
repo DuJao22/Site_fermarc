@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+
+{% block title %}Pedidos - Admin{% endblock %}
+
+{% block content %}
+<div class="content_section" style="margin-top: 30px;">
+    <h2 style="font-size: 28px; margin-bottom: 30px; color: #111;">
+        <i class="fa fa-list"></i> Todos os Pedidos
+    </h2>
+    
+    {% if orders %}
+    <div style="background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead style="background: var(--color-red); color: #fff;">
+                <tr>
+                    <th style="padding: 15px; text-align: left;">ID</th>
+                    <th style="padding: 15px; text-align: left;">Cliente</th>
+                    <th style="padding: 15px; text-align: center;">Total</th>
+                    <th style="padding: 15px; text-align: center;">Status</th>
+                    <th style="padding: 15px; text-align: center;">Data</th>
+                    <th style="padding: 15px; text-align: center;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for order in orders %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 15px;">#{{ order.id }}</td>
+                    <td style="padding: 15px;">{{ order.user.username }}</td>
+                    <td style="padding: 15px; text-align: center; font-weight: 700; color: var(--color-red);">R$ {{ "%.2f"|format(order.total) }}</td>
+                    <td style="padding: 15px; text-align: center;">
+                        <span style="padding: 5px 15px; background: {% if order.status == 'Confirmado' %}#d4edda{% elif order.status == 'Enviado' %}#d1ecf1{% else %}#fff3cd{% endif %}; color: {% if order.status == 'Confirmado' %}#155724{% elif order.status == 'Enviado' %}#0c5460{% else %}#856404{% endif %}; border-radius: 15px; font-size: 12px; font-weight: 600;">
+                            {{ order.status }}
+                        </span>
+                    </td>
+                    <td style="padding: 15px; text-align: center;">{{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</td>
+                    <td style="padding: 15px; text-align: center;">
+                        <a href="{{ url_for('admin.order_detail', order_id=order.id) }}" style="color: var(--color-red); text-decoration: none; font-weight: 600;">
+                            <i class="fa fa-eye"></i> Ver Detalhes
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% else %}
+    <p style="text-align: center; padding: 40px; background: #f9f9f9; border-radius: 8px;">Nenhum pedido ainda</p>
+    {% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% block title %}Editar Categoria - Admin{% endblock %}
+
+{% block content %}
+<div class="content_section" style="margin: 30px auto; max-width: 600px;">
+    <h2 style="font-size: 28px; margin-bottom: 30px; color: #111;">
+        <i class="fa fa-edit"></i> Editar Categoria
+    </h2>
+    
+    <div style="background: #fff; padding: 40px; border-radius: 8px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <form method="POST" action="{{ url_for('admin.edit_category', category_id=category.id) }}">
+            <div style="margin-bottom: 20px;">
+                <label for="name" style="display: block; margin-bottom: 5px; font-weight: 600;">Nome da Categoria:</label>
+                <input type="text" id="name" name="name" value="{{ category.name }}" required style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+            </div>
+            
+            <div style="margin-bottom: 30px;">
+                <label for="description" style="display: block; margin-bottom: 5px; font-weight: 600;">Descrição:</label>
+                <textarea id="description" name="description" rows="4" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">{{ category.description }}</textarea>
+            </div>
+            
+            <div style="display: flex; gap: 10px;">
+                <button type="submit" class="btn_buy" style="flex: 1; padding: 15px; font-size: 16px;">
+                    <i class="fa fa-check"></i> SALVAR ALTERAÇÕES
+                </button>
+                <a href="{{ url_for('admin.categories') }}" style="flex: 1; padding: 15px; text-align: center; background: #ccc; color: #333; border-radius: 5px; font-weight: 700; text-decoration: none;">
+                    <i class="fa fa-times"></i> CANCELAR
+                </a>
+            </div>
+        </form>
+    </div>
+</div>
+{% endblock %}

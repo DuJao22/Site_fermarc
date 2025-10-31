@@ -1,0 +1,199 @@
+{% extends "base.html" %}
+
+{% block title %}Meu Carrinho - Fermarc Robótica{% endblock %}
+
+{% block content %}
+<div class="content_section" style="margin-top: 30px;">
+    <h2 style="font-size: 28px; margin-bottom: 30px; color: #111;">
+        <i class="fa fa-shopping-cart"></i> Meu Carrinho
+    </h2>
+    
+    {% if cart_items %}
+    <div style="background: #fff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <table style="width: 100%; border-collapse: collapse;">
+            <thead style="background: var(--color-red); color: #fff;">
+                <tr>
+                    <th style="padding: 15px; text-align: left;">Produto</th>
+                    <th style="padding: 15px; text-align: center;">Preço</th>
+                    <th style="padding: 15px; text-align: center;">Quantidade</th>
+                    <th style="padding: 15px; text-align: center;">Subtotal</th>
+                    <th style="padding: 15px; text-align: center;">Ações</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in cart_items %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 20px;">
+                        <div style="display: flex; align-items: center; gap: 15px;">
+                            {% if item.product.image_url %}
+                            <img src="{{ item.product.image_url }}" alt="{{ item.product.name }}" style="width: 80px; height: 80px; object-fit: contain;">
+                            {% else %}
+                            <i class="fa fa-microchip" style="font-size: 60px; color: #ccc;"></i>
+                            {% endif %}
+                            <div>
+                                <div style="font-weight: 600; margin-bottom: 5px;">{{ item.product.name }}</div>
+                                <div style="font-size: 12px; color: #666;">Cód: {{ item.product.code }}</div>
+                            </div>
+                        </div>
+                    </td>
+                    <td style="padding: 20px; text-align: center; font-weight: 600;">
+                        R$ {{ "%.2f"|format(item.product.price) }}
+                    </td>
+                    <td style="padding: 20px; text-align: center;">
+                        {{ item.quantity }}
+                    </td>
+                    <td style="padding: 20px; text-align: center; font-weight: 700; font-size: 18px; color: var(--color-red);">
+                        R$ {{ "%.2f"|format(item.product.price * item.quantity) }}
+                    </td>
+                    <td style="padding: 20px; text-align: center;">
+                        <a href="{{ url_for('cart.remove_from_cart', item_id=item.id) }}" style="color: #dc3545; text-decoration: none; font-weight: 600;">
+                            <i class="fa fa-trash"></i> Remover
+                        </a>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    
+    <div style="margin-top: 30px; display: flex; justify-content: flex-end;">
+        <div style="background: #f9f9f9; padding: 30px; border-radius: 8px; min-width: 400px;">
+            <div style="display: flex; justify-content: space-between; margin-bottom: 20px; padding-bottom: 20px; border-bottom: 2px solid #ddd;">
+                <span style="font-size: 20px; font-weight: 700;">TOTAL:</span>
+                <span style="font-size: 24px; font-weight: 700; color: var(--color-red);">R$ {{ "%.2f"|format(total) }}</span>
+            </div>
+            <div style="font-size: 14px; color: #666; margin-bottom: 20px;">
+                <i class="fa fa-credit-card"></i> 12x de R$ {{ "%.2f"|format(total / 12) }} sem juros<br>
+                <i class="fa fa-money"></i> R$ {{ "%.2f"|format(total * 0.95) }} no PIX (5% de desconto)
+            </div>
+            
+            <form method="POST" action="{{ url_for('cart.checkout') }}" id="checkoutForm">
+                <div style="margin-bottom: 25px; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid #e0e0e0;">
+                    <h3 style="font-size: 16px; margin-bottom: 15px; color: #333; font-weight: 700;">
+                        <i class="fa fa-truck"></i> Tipo de Entrega
+                    </h3>
+                    
+                    {% if pickup_enabled %}
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: flex; align-items: start; cursor: pointer; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; transition: all 0.3s;" class="delivery-option">
+                            <input type="radio" name="delivery_type" value="pickup" style="margin-top: 3px; margin-right: 12px;" onchange="toggleDeliveryFields()" required>
+                            <div>
+                                <strong style="font-size: 14px; display: block; margin-bottom: 5px;">
+                                    <i class="fa fa-map-marker"></i> Retirada no Local
+                                </strong>
+                                <small style="color: #666; font-size: 12px; display: block;">
+                                    {{ pickup_address }}
+                                </small>
+                            </div>
+                        </label>
+                    </div>
+                    {% endif %}
+                    
+                    {% if delivery_enabled %}
+                    <div>
+                        <label style="display: flex; align-items: start; cursor: pointer; padding: 12px; border: 2px solid #e0e0e0; border-radius: 6px; transition: all 0.3s;" class="delivery-option">
+                            <input type="radio" name="delivery_type" value="delivery" {% if not pickup_enabled %}checked{% endif %} style="margin-top: 3px; margin-right: 12px;" onchange="toggleDeliveryFields()" required>
+                            <div style="flex: 1;">
+                                <strong style="font-size: 14px; display: block; margin-bottom: 5px;">
+                                    <i class="fa fa-truck"></i> Entrega
+                                </strong>
+                                <small style="color: #666; font-size: 12px; display: block;">
+                                    Frete: R$ {{ "%.2f"|format(shipping_cost) }}
+                                    {% if total >= free_shipping_min %}
+                                    <span style="color: var(--color-green); font-weight: 600;"> - FRETE GRÁTIS! </span>
+                                    {% else %}
+                                    (Grátis acima de R$ {{ "%.2f"|format(free_shipping_min) }})
+                                    {% endif %}
+                                </small>
+                            </div>
+                        </label>
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div style="margin-bottom: 25px; padding: 20px; background: #fff; border-radius: 8px; border: 1px solid #e0e0e0;">
+                    <h3 style="font-size: 16px; margin-bottom: 15px; color: #333; font-weight: 700;">
+                        <i class="fa fa-user"></i> Dados para Entrega
+                    </h3>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #555;">
+                            Nome Completo *
+                        </label>
+                        <input type="text" name="customer_name" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                    </div>
+                    
+                    <div style="margin-bottom: 15px;">
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #555;">
+                            Telefone *
+                        </label>
+                        <input type="tel" name="customer_phone" required placeholder="(11) 99999-9999" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px;">
+                    </div>
+                    
+                    <div id="delivery_address_field" style="display: none;">
+                        <label style="display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: #555;">
+                            Endereço Completo para Entrega *
+                        </label>
+                        <textarea name="delivery_address" rows="3" placeholder="Rua, número, complemento, bairro, cidade, estado, CEP" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; font-size: 14px; resize: vertical;"></textarea>
+                    </div>
+                </div>
+                
+                <button type="submit" class="btn_buy" style="width: 100%; padding: 15px; font-size: 18px;">
+                    <i class="fa fa-check"></i> FINALIZAR COMPRA
+                </button>
+            </form>
+            <a href="{{ url_for('main.index') }}" style="display: block; text-align: center; margin-top: 15px; color: var(--color-red); text-decoration: none;">
+                <i class="fa fa-arrow-left"></i> Continuar Comprando
+            </a>
+        </div>
+    </div>
+    {% else %}
+    <div style="text-align: center; padding: 60px; background: #f9f9f9; border-radius: 8px;">
+        <i class="fa fa-shopping-cart" style="font-size: 80px; color: #ccc; margin-bottom: 20px;"></i>
+        <h3 style="font-size: 24px; margin-bottom: 15px;">Seu carrinho está vazio</h3>
+        <p style="color: #666; margin-bottom: 30px;">Adicione produtos ao carrinho para continuar comprando</p>
+        <a href="{{ url_for('main.index') }}" class="btn_buy" style="display: inline-block; text-decoration: none;">
+            <i class="fa fa-shopping-bag"></i> IR ÀS COMPRAS
+        </a>
+    </div>
+    {% endif %}
+</div>
+
+<script>
+function toggleDeliveryFields() {
+    const deliveryType = document.querySelector('input[name="delivery_type"]:checked');
+    const deliveryAddressField = document.getElementById('delivery_address_field');
+    const deliveryAddressInput = deliveryAddressField.querySelector('textarea');
+    
+    if (deliveryType && deliveryType.value === 'delivery') {
+        deliveryAddressField.style.display = 'block';
+        deliveryAddressInput.required = true;
+    } else {
+        deliveryAddressField.style.display = 'none';
+        deliveryAddressInput.required = false;
+    }
+    
+    const labels = document.querySelectorAll('.delivery-option');
+    labels.forEach(label => {
+        const radio = label.querySelector('input[type="radio"]');
+        if (radio.checked) {
+            label.style.borderColor = 'var(--color-red)';
+            label.style.background = '#fff5f5';
+        } else {
+            label.style.borderColor = '#e0e0e0';
+            label.style.background = '#fff';
+        }
+    });
+}
+
+document.addEventListener('DOMContentLoaded', function() {
+    toggleDeliveryFields();
+});
+</script>
+
+<style>
+.delivery-option:hover {
+    border-color: var(--color-red) !important;
+}
+</style>
+{% endblock %}

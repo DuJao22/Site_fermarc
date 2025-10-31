@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Fermarc Robótica{% endblock %}</title>
+    <meta name="description" content="Fermarc Robótica - Tudo em robótica e automação! Arduino, sensores, módulos, ESP32, componentes eletrônicos.">
+    <meta name="theme-color" content="#111111">
+    <link rel="icon" type="image/png" href="https://cdn.awsli.com.br/95/95881/favicon/67e2dbfe25.png">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    {% block extra_css %}{% endblock %}
+</head>
+<body>
+    <nav class="top_nav">
+        <div class="top_nav_container">
+            <ul class="top_nav_left">
+                <li><a href="{{ url_for('main.index') }}">Início</a></li>
+                <li><a href="{{ url_for('main.index') }}#produtos">Produtos</a></li>
+                {% if current_user.is_authenticated and current_user.is_admin %}
+                <li><a href="{{ url_for('admin.dashboard') }}">Admin</a></li>
+                {% endif %}
+                <li><a href="#contato">Contato</a></li>
+            </ul>
+            <div class="top_nav_right">
+                <span><i class="fa fa-phone"></i> 31 99373-9746 / 31 2557-0868</span>
+                <a href="mailto:vendasfermarc@gmail.com"><i class="fa fa-envelope"></i> vendasfermarc@gmail.com</a>
+            </div>
+        </div>
+    </nav>
+
+    <header class="header_main">
+        <div class="header_main_container">
+            <a href="{{ url_for('main.index') }}" class="logo">
+                <img src="https://cdn.awsli.com.br/400x300/95/95881/logo/logo-roboticar-qrdwja.png" alt="Fermarc Robótica" style="height: 50px;">
+            </a>
+            
+            <form class="search-form" action="{{ url_for('main.search') }}" method="GET">
+                <input type="text" name="q" class="search-input" placeholder="Buscar produtos, categorias..." value="{{ request.args.get('q', '') }}">
+                <button type="submit" class="search-btn">
+                    <i class="fa fa-search"></i> Buscar
+                </button>
+            </form>
+            
+            <div class="header_actions">
+                {% if current_user.is_authenticated %}
+                    {% if current_user.is_admin %}
+                        <a href="{{ url_for('admin.dashboard') }}" class="header_action" style="color: #FFD700;">
+                            <i class="fa fa-user-secret"></i>
+                            <span>Admin</span>
+                        </a>
+                    {% endif %}
+                    <a href="{{ url_for('cart.view_cart') }}" class="header_action">
+                        <i class="fa fa-shopping-cart"></i>
+                        <span>Carrinho</span>
+                    </a>
+                    <a href="{{ url_for('cart.my_orders') }}" class="header_action">
+                        <i class="fa fa-list"></i>
+                        <span>Pedidos</span>
+                    </a>
+                    <a href="{{ url_for('auth.logout') }}" class="header_action">
+                        <i class="fa fa-sign-out"></i>
+                        <span>Sair</span>
+                    </a>
+                {% else %}
+                    <a href="{{ url_for('auth.login') }}" class="header_action">
+                        <i class="fa fa-user"></i>
+                        <span>Login</span>
+                    </a>
+                    <a href="{{ url_for('auth.register') }}" class="header_action">
+                        <i class="fa fa-user-plus"></i>
+                        <span>Cadastrar</span>
+                    </a>
+                {% endif %}
+            </div>
+        </div>
+    </header>
+
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div style="max-width: 1200px; margin: 20px auto; padding: 0 20px;">
+                {% for category, message in messages %}
+                    <div class="alert alert-{{ category }}" style="padding: 15px; margin-bottom: 10px; border-radius: 5px; background: {% if category == 'success' %}#d4edda{% elif category == 'danger' %}#f8d7da{% elif category == 'warning' %}#fff3cd{% else %}#d1ecf1{% endif %}; color: {% if category == 'success' %}#155724{% elif category == 'danger' %}#721c24{% elif category == 'warning' %}#856404{% else %}#0c5460{% endif %}; border: 1px solid {% if category == 'success' %}#c3e6cb{% elif category == 'danger' %}#f5c6cb{% elif category == 'warning' %}#ffeeba{% else %}#bee5eb{% endif %};">
+                        {{ message }}
+                    </div>
+                {% endfor %}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    {% block content %}{% endblock %}
+
+    <!-- Botão flutuante do WhatsApp -->
+    <a href="https://wa.me/5531993739746" target="_blank" class="whatsapp-float" title="Fale conosco no WhatsApp">
+        <img src="https://cdn.awsli.com.br/95/95881/arquivos/FZINHO%20WHATAPP%20MAIOR.png" alt="WhatsApp">
+    </a>
+
+    <footer class="footer">
+        <div class="footer_container">
+            <div class="footer_about">
+                <h3>CONHEÇA-NOS</h3>
+                <p>A Fermarc atua no mercado desde 2013, ao longo desse período vem desenvolvendo diversas parcerias e possui diversos produtos relacionados a Automação, Robótica e Eletrônica em geral. Nosso objetivo é tornar os mais variados produtos acessíveis e por um preço justo, prezando sempre por produtos de ponta e de qualidade com garantia. Vamos além de disponibilizar a maior diversidade de produtos do mercado, nós também ensinamos sobre eletrônica, demonstramos a aplicabilidade de nos produtos que vendemos.</p>
+            </div>
+            
+            <div class="footer_grid">
+                <div class="footer_column">
+                    <h3>Categorias</h3>
+                    <ul>
+                        <li><a href="#">ROBÓTICA</a></li>
+                        <li><a href="#">Kit's</a></li>
+                        <li><a href="#">PLACA</a></li>
+                        <li><a href="#">DISPLAY</a></li>
+                        <li><a href="#">SENSORES</a></li>
+                        <li><a href="#">PROTOTIPAGEM</a></li>
+                        <li><a href="#">MOTORES</a></li>
+                        <li><a href="#">WIRELESS</a></li>
+                        <li><a href="#">FONTES</a></li>
+                        <li><a href="#">MÓDULOS</a></li>
+                        <li><a href="#">COMPONENTES</a></li>
+                    </ul>
+                </div>
+                <div class="footer_column">
+                    <h3>Conteúdo</h3>
+                    <ul>
+                        <li><a href="#contato">Fale Conosco</a></li>
+                        <li><a href="#">Catálogo</a></li>
+                        <li><a href="#">Faça você Mesmo</a></li>
+                        <li><a href="#">Fazemos Seu Projeto</a></li>
+                        <li><a href="#">Robótica Educacional</a></li>
+                    </ul>
+                </div>
+                <div class="footer_column">
+                    <h3>Informações</h3>
+                    <ul>
+                        <li><a href="#">Formas de Entrega</a></li>
+                        <li><a href="#">Formas de Envio</a></li>
+                        <li><a href="#">Política de Troca e Devolução</a></li>
+                        <li><a href="#">Sobre Nós</a></li>
+                        <li><a href="#">Sobre a loja</a></li>
+                    </ul>
+                </div>
+                <div class="footer_column">
+                    <h3>Atendimento</h3>
+                    <ul>
+                        <li><strong>Segunda a Sexta:</strong> 9h às 18h</li>
+                        <li><strong>Sábado:</strong> 9h às 12h</li>
+                        <li><i class="fa fa-whatsapp"></i> 31 99373-9746</li>
+                        <li><i class="fa fa-phone"></i> 31 2557-0868</li>
+                        <li><i class="fa fa-envelope"></i> vendasfermarc@gmail.com</li>
+                    </ul>
+                    <div class="footer_social">
+                        <a href="#" title="Facebook"><i class="fa fa-facebook"></i></a>
+                        <a href="#" title="Instagram"><i class="fa fa-instagram"></i></a>
+                        <a href="#" title="YouTube"><i class="fa fa-youtube"></i></a>
+                        <a href="#" title="Twitter"><i class="fa fa-twitter"></i></a>
+                    </div>
+                </div>
+            </div>
+            <div class="footer_bottom">
+                <p>&copy; 2025 Fermarc Robótica - Desde 2013. Todos os direitos reservados.</p>
+                <p style="margin-top: 10px;">
+                    <strong>Sistema desenvolvido por:</strong> 
+                    <a href="https://dujao22.github.io/Apresentacao_Solucoes_Digitais-/" target="_blank" style="color: var(--color-red); font-weight: bold;">
+                        João Layon - Desenvolvedor Fullstack
+                    </a>
+                </p>
+            </div>
+        </div>
+    </footer>
+
+    {% block extra_js %}{% endblock %}
+</body>
+</html>

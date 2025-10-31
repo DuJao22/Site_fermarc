@@ -1,0 +1,91 @@
+{% extends "base.html" %}
+
+{% block title %}{{ product.name }} - Fermarc Robótica{% endblock %}
+
+{% block content %}
+<div class="content_section" style="margin-top: 30px;">
+    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 40px; margin-bottom: 30px;">
+        <div style="text-align: center;">
+            {% if product.image_url %}
+            <img src="{{ product.image_url }}" alt="{{ product.name }}" style="max-width: 100%; border-radius: 8px; box-shadow: 0 4px 15px rgba(0,0,0,0.1);">
+            {% else %}
+            <div style="background: #f9f9f9; padding: 60px; border-radius: 8px;">
+                <i class="fa fa-microchip" style="font-size: 120px; color: #ccc;"></i>
+            </div>
+            {% endif %}
+        </div>
+        
+        <div>
+            <h1 style="font-size: 28px; color: #111; margin-bottom: 20px;">{{ product.name }}</h1>
+            <p style="color: #666; margin-bottom: 10px;"><strong>Código:</strong> {{ product.code }}</p>
+            <p style="color: #666; margin-bottom: 10px;"><strong>Categoria:</strong> {{ product.category.name }}</p>
+            
+            {% if product.stock > 0 %}
+            <div style="background: #d4edda; color: #155724; padding: 10px; border-radius: 5px; margin: 20px 0;">
+                <i class="fa fa-check"></i> <strong>Em estoque:</strong> {{ product.stock }} unidades
+            </div>
+            {% else %}
+            <div style="background: #f8d7da; color: #721c24; padding: 10px; border-radius: 5px; margin: 20px 0;">
+                <i class="fa fa-times"></i> <strong>Produto Indisponível</strong>
+            </div>
+            {% endif %}
+            
+            <div style="margin: 30px 0;">
+                <div style="font-size: 36px; font-weight: 700; color: #111; margin-bottom: 10px;">
+                    R$ {{ "%.2f"|format(product.price) }}
+                </div>
+                <div style="font-size: 14px; color: #666; margin-bottom: 5px;">
+                    12x de R$ {{ "%.2f"|format(product.price / 12) }} sem juros
+                </div>
+                <div style="font-size: 16px; color: #00C851; font-weight: 600;">
+                    R$ {{ "%.2f"|format(product.price * 0.95) }} no PIX (5% de desconto)
+                </div>
+            </div>
+            
+            {% if current_user.is_authenticated and product.stock > 0 %}
+            <form action="{{ url_for('cart.add_to_cart', product_id=product.id) }}" method="POST" style="margin-top: 30px;">
+                <div style="margin-bottom: 20px;">
+                    <label for="quantity" style="display: block; margin-bottom: 5px; font-weight: 600;">Quantidade:</label>
+                    <input type="number" name="quantity" id="quantity" value="1" min="1" max="{{ product.stock }}" style="padding: 10px; font-size: 16px; width: 100px; border: 2px solid #ddd; border-radius: 4px;">
+                </div>
+                <button type="submit" class="btn_buy" style="width: 100%; padding: 15px; font-size: 18px;">
+                    <i class="fa fa-shopping-cart"></i> ADICIONAR AO CARRINHO
+                </button>
+            </form>
+            {% elif not current_user.is_authenticated %}
+            <a href="{{ url_for('auth.login') }}" class="btn_buy" style="display: block; text-align: center; text-decoration: none; width: 100%; padding: 15px; font-size: 18px;">
+                FAÇA LOGIN PARA COMPRAR
+            </a>
+            {% endif %}
+        </div>
+    </div>
+    
+    <div style="margin-top: 40px; padding: 30px; background: #f9f9f9; border-radius: 8px;">
+        <h3 style="font-size: 20px; margin-bottom: 15px; color: #111;">Descrição do Produto</h3>
+        <p style="line-height: 1.8; color: #555;">{{ product.description or 'Descrição não disponível.' }}</p>
+    </div>
+    
+    {% if related_products %}
+    <div style="margin-top: 40px;">
+        <h3 style="font-size: 20px; margin-bottom: 20px; color: #111;">Produtos Relacionados</h3>
+        <div class="products_grid">
+            {% for related in related_products %}
+            <div class="product_card">
+                <div class="product_image">
+                    {% if related.image_url %}
+                    <img src="{{ related.image_url }}" alt="{{ related.name }}" style="max-width: 100%; max-height: 180px; object-fit: contain;">
+                    {% else %}
+                    <i class="fa fa-microchip"></i>
+                    {% endif %}
+                </div>
+                <div class="product_code">Cód: {{ related.code }}</div>
+                <div class="product_name">{{ related.name }}</div>
+                <div class="product_price">R$ {{ "%.2f"|format(related.price) }}</div>
+                <a href="{{ url_for('main.product_detail', product_id=related.id) }}" class="btn_buy">VER DETALHES</a>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    {% endif %}
+</div>
+{% endblock %}

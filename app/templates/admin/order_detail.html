@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+
+{% block title %}Detalhes do Pedido #{{ order.id }} - Admin{% endblock %}
+
+{% block content %}
+<div class="content_section" style="margin-top: 30px;">
+    <h2 style="font-size: 28px; margin-bottom: 30px; color: #111;">
+        <i class="fa fa-file-text"></i> Pedido #{{ order.id }}
+    </h2>
+    
+    <div style="background: #fff; border-radius: 8px; padding: 30px; box-shadow: 0 2px 10px rgba(0,0,0,0.1);">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-bottom: 30px; padding-bottom: 30px; border-bottom: 2px solid #e0e0e0;">
+            <div>
+                <h3 style="font-size: 18px; margin-bottom: 15px; color: #111;">Informações do Cliente</h3>
+                <p style="margin-bottom: 10px;"><strong>Nome:</strong> {{ order.user.username }}</p>
+                <p style="margin-bottom: 10px;"><strong>Email:</strong> {{ order.user.email }}</p>
+            </div>
+            <div>
+                <h3 style="font-size: 18px; margin-bottom: 15px; color: #111;">Informações do Pedido</h3>
+                <p style="margin-bottom: 10px;"><strong>Data:</strong> {{ order.created_at.strftime('%d/%m/%Y %H:%M') }}</p>
+                <p style="margin-bottom: 10px;"><strong>Total:</strong> <span style="color: var(--color-red); font-weight: 700; font-size: 20px;">R$ {{ "%.2f"|format(order.total) }}</span></p>
+                <p style="margin-bottom: 10px;">
+                    <strong>Status:</strong>
+                    <span style="padding: 5px 15px; background: {% if order.status == 'Confirmado' %}#d4edda{% elif order.status == 'Enviado' %}#d1ecf1{% else %}#fff3cd{% endif %}; color: {% if order.status == 'Confirmado' %}#155724{% elif order.status == 'Enviado' %}#0c5460{% else %}#856404{% endif %}; border-radius: 15px; font-size: 12px; font-weight: 600;">
+                        {{ order.status }}
+                    </span>
+                </p>
+            </div>
+        </div>
+        
+        <h3 style="font-size: 18px; margin-bottom: 15px; color: #111;">Itens do Pedido</h3>
+        <table style="width: 100%; border-collapse: collapse; margin-bottom: 30px;">
+            <thead style="background: #f9f9f9;">
+                <tr>
+                    <th style="padding: 12px; text-align: left; border-bottom: 2px solid #e0e0e0;">Produto</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 2px solid #e0e0e0;">Quantidade</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 2px solid #e0e0e0;">Preço Unit.</th>
+                    <th style="padding: 12px; text-align: center; border-bottom: 2px solid #e0e0e0;">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in order.items %}
+                <tr style="border-bottom: 1px solid #e0e0e0;">
+                    <td style="padding: 12px;">{{ item.product.name }}</td>
+                    <td style="padding: 12px; text-align: center;">{{ item.quantity }}</td>
+                    <td style="padding: 12px; text-align: center;">R$ {{ "%.2f"|format(item.price) }}</td>
+                    <td style="padding: 12px; text-align: center; font-weight: 600;">R$ {{ "%.2f"|format(item.price * item.quantity) }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        
+        <div style="background: #f9f9f9; padding: 20px; border-radius: 8px;">
+            <h3 style="font-size: 18px; margin-bottom: 15px; color: #111;">Atualizar Status</h3>
+            <form method="POST" action="{{ url_for('admin.update_order_status', order_id=order.id) }}" style="display: flex; gap: 15px; align-items: center;">
+                <select name="status" required style="flex: 1; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+                    <option value="Pendente" {% if order.status == 'Pendente' %}selected{% endif %}>Pendente</option>
+                    <option value="Confirmado" {% if order.status == 'Confirmado' %}selected{% endif %}>Confirmado</option>
+                    <option value="Enviado" {% if order.status == 'Enviado' %}selected{% endif %}>Enviado</option>
+                    <option value="Entregue" {% if order.status == 'Entregue' %}selected{% endif %}>Entregue</option>
+                    <option value="Cancelado" {% if order.status == 'Cancelado' %}selected{% endif %}>Cancelado</option>
+                </select>
+                <button type="submit" class="btn_buy" style="padding: 12px 30px; font-size: 14px;">
+                    <i class="fa fa-check"></i> ATUALIZAR
+                </button>
+            </form>
+        </div>
+        
+        <div style="margin-top: 30px; text-align: center;">
+            <a href="{{ url_for('admin.orders') }}" style="color: var(--color-red); text-decoration: none; font-weight: 600;">
+                <i class="fa fa-arrow-left"></i> Voltar para Pedidos
+            </a>
+        </div>
+    </div>
+</div>
+{% endblock %}

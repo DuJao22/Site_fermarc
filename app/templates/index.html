@@ -1,0 +1,148 @@
+{% extends "base.html" %}
+
+{% block title %}Fermarc Robótica - Componentes Eletrônicos, Arduino, Sensores e Módulos{% endblock %}
+
+{% block content %}
+<div class="sidebar_wrapper">
+    <button class="categories_toggle_btn" onclick="toggleCategories()">
+        <i class="fa fa-bars"></i>
+        <span id="toggleText">VER CATEGORIAS</span>
+    </button>
+    
+    <aside class="sidebar_categories" id="sidebarCategories">
+        <div class="sidebar_header">
+            <i class="fa fa-bars"></i> CATEGORIAS
+        </div>
+        <ul class="sidebar_menu">
+            {% for category in categories %}
+            <li>
+                <a href="{{ url_for('main.category_products', category_id=category.id) }}">
+                    <span><i class="fa fa-microchip fa-fw"></i> {{ category.name }}</span>
+                    <i class="fa fa-chevron-right"></i>
+                </a>
+            </li>
+            {% endfor %}
+        </ul>
+    </aside>
+    
+    <section class="fullbanner_section">
+        <div class="carousel">
+            <div class="carousel_track" id="carouselTrack">
+                <div class="carousel_slide slide1"></div>
+                <div class="carousel_slide slide2"></div>
+                <div class="carousel_slide slide3"></div>
+            </div>
+            <button class="carousel_btn prev" onclick="prevSlide()">&#10094;</button>
+            <button class="carousel_btn next" onclick="nextSlide()">&#10095;</button>
+        </div>
+        <div class="carousel_dots">
+            <button class="carousel_dot active" onclick="goToSlide(0)"></button>
+            <button class="carousel_dot" onclick="goToSlide(1)"></button>
+            <button class="carousel_dot" onclick="goToSlide(2)"></button>
+        </div>
+    </section>
+</div>
+
+<div class="content_section">
+    <div class="features">
+        <div class="features_grid">
+            <div class="feature_item">
+                <i class="fa fa-truck feature_icon"></i>
+                <div class="feature_text">
+                    <strong>Frete Grátis</strong>
+                    <span>Acima de R$ 300</span>
+                </div>
+            </div>
+            <div class="feature_item">
+                <i class="fa fa-credit-card feature_icon"></i>
+                <div class="feature_text">
+                    <strong>Parcele em até 12x</strong>
+                    <span>No cartão de crédito</span>
+                </div>
+            </div>
+            <div class="feature_item">
+                <i class="fa fa-shield feature_icon"></i>
+                <div class="feature_text">
+                    <strong>Compra Segura</strong>
+                    <span>Ambiente protegido</span>
+                </div>
+            </div>
+            <div class="feature_item">
+                <i class="fa fa-clock-o feature_icon"></i>
+                <div class="feature_text">
+                    <strong>Entrega Rápida</strong>
+                    <span>Para todo Brasil</span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <section class="products_section" id="produtos">
+        <div class="section_header">
+            <h2 class="section_title">Produtos em Destaque</h2>
+        </div>
+        
+        <div class="products_grid">
+            {% for product in products %}
+            <div class="product_card">
+                <div class="product_image">
+                    {% if product.image_url %}
+                    <img src="{{ product.image_url }}" alt="{{ product.name }}" style="max-width: 100%; max-height: 180px; object-fit: contain;">
+                    {% else %}
+                    <i class="fa fa-microchip"></i>
+                    {% endif %}
+                </div>
+                <div class="product_code">Cód: {{ product.code }}</div>
+                <div class="product_name">{{ product.name }}</div>
+                <div class="product_price">R$ {{ "%.2f"|format(product.price) }}</div>
+                <div class="product_installments">12x de R$ {{ "%.2f"|format(product.price / 12) }}</div>
+                <div class="product_pix">R$ {{ "%.2f"|format(product.price * 0.95) }} no PIX</div>
+                <a href="{{ url_for('main.product_detail', product_id=product.id) }}" class="btn_buy">VER DETALHES</a>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+
+<script>
+let currentSlide = 0;
+const slides = document.querySelectorAll('.carousel_slide');
+const dots = document.querySelectorAll('.carousel_dot');
+const track = document.getElementById('carouselTrack');
+
+function showSlide(n) {
+    currentSlide = (n + slides.length) % slides.length;
+    track.style.transform = `translateX(-${currentSlide * 100}%)`;
+    
+    dots.forEach((dot, index) => {
+        dot.classList.toggle('active', index === currentSlide);
+    });
+}
+
+function nextSlide() {
+    showSlide(currentSlide + 1);
+}
+
+function prevSlide() {
+    showSlide(currentSlide - 1);
+}
+
+function goToSlide(n) {
+    showSlide(n);
+}
+
+function toggleCategories() {
+    const sidebar = document.getElementById('sidebarCategories');
+    const toggleText = document.getElementById('toggleText');
+    sidebar.classList.toggle('active');
+    
+    if (sidebar.classList.contains('active')) {
+        toggleText.textContent = 'OCULTAR CATEGORIAS';
+    } else {
+        toggleText.textContent = 'VER CATEGORIAS';
+    }
+}
+
+setInterval(nextSlide, 5000);
+</script>
+{% endblock %}
