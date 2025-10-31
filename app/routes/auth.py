@@ -78,3 +78,35 @@ def logout():
     logout_user()
     flash('Você saiu da sua conta.', 'info')
     return redirect(url_for('main.index'))
+
+@auth_bp.route('/alterar-senha', methods=['GET', 'POST'])
+@login_required
+def change_password():
+    if request.method == 'POST':
+        current_password = request.form.get('current_password')
+        new_password = request.form.get('new_password')
+        confirm_password = request.form.get('confirm_password')
+        
+        # Verificar senha atual
+        if not current_user.check_password(current_password):
+            flash('Senha atual incorreta.', 'danger')
+            return render_template('change_password.html')
+        
+        # Verificar se as novas senhas coincidem
+        if new_password != confirm_password:
+            flash('As novas senhas não coincidem.', 'danger')
+            return render_template('change_password.html')
+        
+        # Verificar tamanho mínimo da senha
+        if len(new_password) < 6:
+            flash('A nova senha deve ter no mínimo 6 caracteres.', 'danger')
+            return render_template('change_password.html')
+        
+        # Atualizar senha
+        current_user.set_password(new_password)
+        db.session.commit()
+        
+        flash('Senha alterada com sucesso!', 'success')
+        return redirect(url_for('main.index'))
+    
+    return render_template('change_password.html')

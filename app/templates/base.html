@@ -45,6 +45,7 @@
                 {% if current_user.is_authenticated %}
                     <li><a href="{{ url_for('cart.view_cart') }}"><i class="fa fa-shopping-cart"></i> Carrinho</a></li>
                     <li><a href="{{ url_for('cart.my_orders') }}"><i class="fa fa-list"></i> Meus Pedidos</a></li>
+                    <li><a href="{{ url_for('auth.change_password') }}"><i class="fa fa-lock"></i> Alterar Senha</a></li>
                     {% if current_user.is_admin %}
                         <li><a href="{{ url_for('admin.dashboard') }}"><i class="fa fa-user-secret"></i> Admin</a></li>
                     {% endif %}
@@ -90,6 +91,10 @@
                     <a href="{{ url_for('cart.my_orders') }}" class="header_action">
                         <i class="fa fa-list"></i>
                         <span>Pedidos</span>
+                    </a>
+                    <a href="{{ url_for('auth.change_password') }}" class="header_action">
+                        <i class="fa fa-lock"></i>
+                        <span>Senha</span>
                     </a>
                     <a href="{{ url_for('auth.logout') }}" class="header_action">
                         <i class="fa fa-sign-out"></i>
