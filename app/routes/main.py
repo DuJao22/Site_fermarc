@@ -1,5 +1,5 @@
 from flask import Blueprint, render_template, request
-from app.models import Product, Category
+from app.models import Product, Category, Slide
 from sqlalchemy import or_
 
 main_bp = Blueprint('main', __name__)
@@ -8,11 +8,12 @@ main_bp = Blueprint('main', __name__)
 def index():
     categories = Category.query.all()
     featured_products = Product.query.filter_by(featured=True, active=True).limit(12).all()
+    slides = Slide.query.filter_by(active=True).order_by(Slide.order, Slide.created_at.desc()).all()
     
     if not featured_products:
         featured_products = Product.query.filter_by(active=True).limit(12).all()
     
-    return render_template('index.html', categories=categories, products=featured_products)
+    return render_template('index.html', categories=categories, products=featured_products, slides=slides)
 
 @main_bp.route('/produto/<int:product_id>')
 def product_detail(product_id):

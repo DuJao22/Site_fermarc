@@ -84,6 +84,7 @@ Plataforma completa de e-commerce desenvolvida com Python Flask, SQLite3, HTML, 
 - ✅ Produtos em destaque
 - ✅ **NOVO**: CRUD completo de cupons de desconto
 - ✅ **NOVO**: Gerenciamento de validade e usos de cupons
+- ✅ **NOVO**: Gerenciamento de slides do carrossel principal
 
 ### Wishlist (Lista de Desejos) - NOVO
 - ✅ Adicionar produtos à lista de desejos
@@ -145,6 +146,17 @@ O sistema está configurado para rodar automaticamente no Replit. Basta acessar 
 - **Database**: SQLite (instance/ecommerce.db)
 
 ## Recent Changes
+- **2025-10-31 (Sistema de Gerenciamento de Slides)**: Nova funcionalidade para gerenciar carrossel da página inicial
+  - ✅ Modelo Slide no banco de dados para armazenar slides do carrossel
+  - ✅ CRUD completo de slides no painel administrativo
+  - ✅ Gerenciamento de ordem de exibição dos slides
+  - ✅ Controle de status (ativo/inativo) dos slides
+  - ✅ Suporte para links clicáveis nos slides
+  - ✅ Upload de imagens via URL
+  - ✅ Templates HTML para adicionar, editar e listar slides
+  - ✅ Página inicial atualizada para carregar slides do banco de dados dinamicamente
+  - ✅ Link "Gerenciar Slides" adicionado ao dashboard administrativo
+
 - **2025-10-31 (Replit Setup)**: Project configured for Replit environment
   - ✅ Python 3.11 installed
   - ✅ All dependencies installed from requirements.txt

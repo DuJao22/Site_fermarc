@@ -3,7 +3,7 @@ from flask_login import login_required, current_user
 from functools import wraps
 from sqlalchemy import or_
 from app import db
-from app.models import Product, Category, Order, User, Coupon, StoreSettings
+from app.models import Product, Category, Order, User, Coupon, StoreSettings, Slide
 from datetime import datetime
 
 admin_bp = Blueprint('admin', __name__, url_prefix='/admin')
@@ -364,3 +364,92 @@ def store_settings():
     }
     
     return render_template('admin/store_settings.html', settings=settings)
+
+@admin_bp.route('/slides')
+@login_required
+@admin_required
+def slides():
+    slides = Slide.query.order_by(Slide.order, Slide.created_at.desc()).all()
+    return render_template('admin/slides.html', slides=slides)
+
+@admin_bp.route('/slides/adicionar', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def add_slide():
+    if request.method == 'POST':
+        title = request.form.get('title')
+        image_url = request.form.get('image_url')
+        link = request.form.get('link')
+        
+        order_value = request.form.get('order', '0')
+        try:
+            order = int(order_value) if order_value and order_value.strip() else 0
+        except ValueError:
+            order = 0
+        
+        active = request.form.get('active') == 'on'
+        
+        slide = Slide(
+            title=title,
+            image_url=image_url,
+            link=link,
+            order=order,
+            active=active
+        )
+        
+        db.session.add(slide)
+        db.session.commit()
+        
+        flash('Slide adicionado com sucesso!', 'success')
+        return redirect(url_for('admin.slides'))
+    
+    return render_template('admin/add_slide.html')
+
+@admin_bp.route('/slides/editar/<int:slide_id>', methods=['GET', 'POST'])
+@login_required
+@admin_required
+def edit_slide(slide_id):
+    slide = Slide.query.get_or_404(slide_id)
+    
+    if request.method == 'POST':
+        slide.title = request.form.get('title')
+        slide.image_url = request.form.get('image_url')
+        slide.link = request.form.get('link')
+        
+        order_value = request.form.get('order', '0')
+        try:
+            slide.order = int(order_value) if order_value and order_value.strip() else 0
+        except ValueError:
+            slide.order = 0
+        
+        slide.active = request.form.get('active') == 'on'
+        
+        db.session.commit()
+        
+        flash('Slide atualizado com sucesso!', 'success')
+        return redirect(url_for('admin.slides'))
+    
+    return render_template('admin/edit_slide.html', slide=slide)
+
+@admin_bp.route('/slides/deletar/<int:slide_id>', methods=['POST'])
+@login_required
+@admin_required
+def delete_slide(slide_id):
+    slide = Slide.query.get_or_404(slide_id)
+    db.session.delete(slide)
+    db.session.commit()
+    
+    flash('Slide deletado com sucesso!', 'success')
+    return redirect(url_for('admin.slides'))
+
+@admin_bp.route('/slides/toggle/<int:slide_id>', methods=['POST'])
+@login_required
+@admin_required
+def toggle_slide(slide_id):
+    slide = Slide.query.get_or_404(slide_id)
+    slide.active = not slide.active
+    db.session.commit()
+    
+    status = 'ativado' if slide.active else 'desativado'
+    flash(f'Slide {status} com sucesso!', 'success')
+    return redirect(url_for('admin.slides'))

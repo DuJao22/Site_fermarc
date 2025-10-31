@@ -171,3 +171,12 @@ class StoreSettings(db.Model):
             db.session.add(setting)
         db.session.commit()
         return setting
+
+class Slide(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String(200), nullable=False)
+    image_url = db.Column(db.String(500), nullable=False)
+    link = db.Column(db.String(500))
+    order = db.Column(db.Integer, default=0)
+    active = db.Column(db.Boolean, default=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)

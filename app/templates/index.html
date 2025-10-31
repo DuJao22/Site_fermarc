@@ -28,17 +28,33 @@
     <section class="fullbanner_section">
         <div class="carousel">
             <div class="carousel_track" id="carouselTrack">
-                <div class="carousel_slide slide1"></div>
-                <div class="carousel_slide slide2"></div>
-                <div class="carousel_slide slide3"></div>
+                {% if slides %}
+                    {% for slide in slides %}
+                    <div class="carousel_slide" style="background-image: url('{{ slide.image_url }}'); background-size: cover; background-position: center;">
+                        {% if slide.link %}
+                        <a href="{{ slide.link }}" style="display: block; width: 100%; height: 100%;"></a>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
+                {% else %}
+                    <div class="carousel_slide slide1"></div>
+                    <div class="carousel_slide slide2"></div>
+                    <div class="carousel_slide slide3"></div>
+                {% endif %}
             </div>
             <button class="carousel_btn prev" onclick="prevSlide()">&#10094;</button>
             <button class="carousel_btn next" onclick="nextSlide()">&#10095;</button>
         </div>
         <div class="carousel_dots">
-            <button class="carousel_dot active" onclick="goToSlide(0)"></button>
-            <button class="carousel_dot" onclick="goToSlide(1)"></button>
-            <button class="carousel_dot" onclick="goToSlide(2)"></button>
+            {% if slides %}
+                {% for slide in slides %}
+                <button class="carousel_dot {% if loop.first %}active{% endif %}" onclick="goToSlide({{ loop.index0 }})"></button>
+                {% endfor %}
+            {% else %}
+                <button class="carousel_dot active" onclick="goToSlide(0)"></button>
+                <button class="carousel_dot" onclick="goToSlide(1)"></button>
+                <button class="carousel_dot" onclick="goToSlide(2)"></button>
+            {% endif %}
         </div>
     </section>
 </div>
