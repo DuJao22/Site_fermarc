@@ -22,7 +22,14 @@
                     {% if order.user.cpf %}
                     <p style="margin-bottom: 12px;">
                         <strong style="display: inline-block; width: 100px; color: #555;">CPF:</strong> 
-                        <span style="color: #111;">{{ order.user.cpf }}</span>
+                        <span style="color: #111;">
+                            {% set cpf = order.user.cpf %}
+                            {% if cpf|length == 11 %}
+                                {{ cpf[0:3] }}.{{ cpf[3:6] }}.{{ cpf[6:9] }}-{{ cpf[9:11] }}
+                            {% else %}
+                                {{ cpf }}
+                            {% endif %}
+                        </span>
                     </p>
                     {% endif %}
                     <p style="margin-bottom: 12px;">

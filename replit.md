@@ -42,10 +42,13 @@ Plataforma completa de e-commerce desenvolvida com Python Flask, SQLite3, HTML, 
 ## Funcionalidades Implementadas
 
 ### Sistema de Usuários
-- ✅ Registro de novos usuários
+- ✅ Registro de novos usuários com CPF e telefone
 - ✅ Login/Logout com sessões
 - ✅ Hash de senhas com Werkzeug
 - ✅ Controle de acesso (usuário comum vs admin)
+- ✅ **NOVO**: Validação e máscara de CPF no cadastro
+- ✅ **NOVO**: Validação e máscara de telefone no cadastro
+- ✅ **NOVO**: Normalização de CPF (armazenamento sem formatação)
 
 ### Catálogo de Produtos
 - ✅ Listagem de produtos com paginação
@@ -78,13 +81,16 @@ Plataforma completa de e-commerce desenvolvida com Python Flask, SQLite3, HTML, 
 - ✅ Dashboard com estatísticas
 - ✅ CRUD completo de produtos
 - ✅ CRUD completo de categorias
-- ✅ Gerenciamento de pedidos
+- ✅ Gerenciamento de pedidos com informações completas
 - ✅ Atualização de status de pedidos
 - ✅ Controle de estoque
 - ✅ Produtos em destaque
-- ✅ **NOVO**: CRUD completo de cupons de desconto
-- ✅ **NOVO**: Gerenciamento de validade e usos de cupons
-- ✅ **NOVO**: Gerenciamento de slides do carrossel principal
+- ✅ CRUD completo de cupons de desconto
+- ✅ Gerenciamento de validade e usos de cupons
+- ✅ Gerenciamento de slides do carrossel principal
+- ✅ **NOVO**: Visualização completa de pedidos com CPF, telefone e endereço
+- ✅ **NOVO**: Página de detalhes do pedido com todas as informações do cliente
+- ✅ **NOVO**: Interface profissional e organizada para gerenciar pedidos
 
 ### Wishlist (Lista de Desejos) - NOVO
 - ✅ Adicionar produtos à lista de desejos
@@ -146,6 +152,16 @@ O sistema está configurado para rodar automaticamente no Replit. Basta acessar 
 - **Database**: SQLite (instance/ecommerce.db)
 
 ## Recent Changes
+- **2025-10-31 (Melhorias no Admin e Cadastro)**: Novas funcionalidades de gerenciamento de clientes
+  - ✅ Campo CPF adicionado ao cadastro de clientes com validação e máscara automática
+  - ✅ Campo Telefone adicionado ao cadastro de clientes com máscara automática
+  - ✅ Normalização de CPF (armazenado sem pontuação, exibido formatado)
+  - ✅ Página de pedidos do admin totalmente reformulada com mais informações
+  - ✅ Exibição de nome completo, CPF, telefone, email e endereço de entrega
+  - ✅ Página de detalhes do pedido com layout profissional e organizado
+  - ✅ Melhor visualização de tipo de entrega (retirada ou delivery)
+  - ✅ Interface responsiva com scroll horizontal em telas pequenas
+
 - **2025-10-31 (Sistema de Gerenciamento de Slides)**: Nova funcionalidade para gerenciar carrossel da página inicial
   - ✅ Modelo Slide no banco de dados para armazenar slides do carrossel
   - ✅ CRUD completo de slides no painel administrativo

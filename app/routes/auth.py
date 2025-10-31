@@ -51,11 +51,17 @@ def register():
             flash('Este nome de usuário já está em uso.', 'danger')
             return render_template('register.html')
         
-        if cpf and User.query.filter_by(cpf=cpf).first():
+        cpf_normalized = ''.join(filter(str.isdigit, cpf)) if cpf else None
+        
+        if cpf_normalized and len(cpf_normalized) != 11:
+            flash('CPF inválido. Digite 11 dígitos.', 'danger')
+            return render_template('register.html')
+        
+        if cpf_normalized and User.query.filter_by(cpf=cpf_normalized).first():
             flash('Este CPF já está cadastrado.', 'danger')
             return render_template('register.html')
         
-        user = User(username=username, email=email, cpf=cpf, phone=phone)
+        user = User(username=username, email=email, cpf=cpf_normalized, phone=phone)
         user.set_password(password)
         
         db.session.add(user)
