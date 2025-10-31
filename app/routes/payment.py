@@ -82,6 +82,7 @@ def payment_success():
     status = request.args.get('status')
     external_reference = request.args.get('external_reference')
     
+    order = None
     if external_reference:
         order = Order.query.get(int(external_reference))
         if order and order.user_id == current_user.id:
@@ -90,7 +91,7 @@ def payment_success():
             order.status = 'Confirmado'
             db.session.commit()
     
-    return render_template('payment_success.html', payment_id=payment_id, order=order if external_reference else None)
+    return render_template('payment_success.html', payment_id=payment_id, order=order)
 
 @payment_bp.route('/falha')
 @login_required
@@ -98,6 +99,7 @@ def payment_failure():
     payment_id = request.args.get('payment_id')
     external_reference = request.args.get('external_reference')
     
+    order = None
     if external_reference:
         order = Order.query.get(int(external_reference))
         if order and order.user_id == current_user.id:
@@ -105,7 +107,7 @@ def payment_failure():
             order.payment_id = payment_id
             db.session.commit()
     
-    return render_template('payment_failure.html', order=order if external_reference else None)
+    return render_template('payment_failure.html', order=order)
 
 @payment_bp.route('/pendente')
 @login_required
@@ -113,6 +115,7 @@ def payment_pending():
     payment_id = request.args.get('payment_id')
     external_reference = request.args.get('external_reference')
     
+    order = None
     if external_reference:
         order = Order.query.get(int(external_reference))
         if order and order.user_id == current_user.id:
@@ -120,7 +123,7 @@ def payment_pending():
             order.payment_id = payment_id
             db.session.commit()
     
-    return render_template('payment_pending.html', order=order if external_reference else None)
+    return render_template('payment_pending.html', order=order)
 
 @payment_bp.route('/webhook', methods=['POST'])
 def webhook():
