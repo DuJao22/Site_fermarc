@@ -33,6 +33,8 @@ def register():
     
     if request.method == 'POST':
         username = request.form.get('username')
+        cpf = request.form.get('cpf')
+        phone = request.form.get('phone')
         email = request.form.get('email')
         password = request.form.get('password')
         confirm_password = request.form.get('confirm_password')
@@ -49,7 +51,11 @@ def register():
             flash('Este nome de usuário já está em uso.', 'danger')
             return render_template('register.html')
         
-        user = User(username=username, email=email)
+        if cpf and User.query.filter_by(cpf=cpf).first():
+            flash('Este CPF já está cadastrado.', 'danger')
+            return render_template('register.html')
+        
+        user = User(username=username, email=email, cpf=cpf, phone=phone)
         user.set_password(password)
         
         db.session.add(user)
