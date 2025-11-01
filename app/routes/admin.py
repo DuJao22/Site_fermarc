@@ -117,6 +117,10 @@ def add_product():
         stock = int(request.form.get('stock'))
         category_id = int(request.form.get('category_id'))
         image_url = request.form.get('image_url')
+        image_url_2 = request.form.get('image_url_2')
+        image_url_3 = request.form.get('image_url_3')
+        image_url_4 = request.form.get('image_url_4')
+        image_url_5 = request.form.get('image_url_5')
         featured = request.form.get('featured') == 'on'
         
         product = Product(
@@ -127,6 +131,10 @@ def add_product():
             stock=stock,
             category_id=category_id,
             image_url=image_url,
+            image_url_2=image_url_2 if image_url_2 else None,
+            image_url_3=image_url_3 if image_url_3 else None,
+            image_url_4=image_url_4 if image_url_4 else None,
+            image_url_5=image_url_5 if image_url_5 else None,
             featured=featured
         )
         
@@ -153,6 +161,10 @@ def edit_product(product_id):
         product.stock = int(request.form.get('stock'))
         product.category_id = int(request.form.get('category_id'))
         product.image_url = request.form.get('image_url')
+        product.image_url_2 = request.form.get('image_url_2') if request.form.get('image_url_2') else None
+        product.image_url_3 = request.form.get('image_url_3') if request.form.get('image_url_3') else None
+        product.image_url_4 = request.form.get('image_url_4') if request.form.get('image_url_4') else None
+        product.image_url_5 = request.form.get('image_url_5') if request.form.get('image_url_5') else None
         product.featured = request.form.get('featured') == 'on'
         product.active = request.form.get('active') == 'on'
         

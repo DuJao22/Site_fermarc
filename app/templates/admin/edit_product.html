@@ -3,7 +3,7 @@
 {% block title %}Editar Produto - Admin{% endblock %}
 
 {% block content %}
-<div class="content_section" style="margin: 30px auto; max-width: 800px;">
+<div class="content_section" style="margin: 30px auto; max-width: 900px;">
     <h2 style="font-size: 28px; margin-bottom: 30px; color: #111;">
         <i class="fa fa-edit"></i> Editar Produto
     </h2>
@@ -45,9 +45,77 @@
                 </select>
             </div>
             
-            <div style="margin-bottom: 20px;">
-                <label for="image_url" style="display: block; margin-bottom: 5px; font-weight: 600;">URL da Imagem:</label>
-                <input type="url" id="image_url" name="image_url" value="{{ product.image_url }}" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin-bottom: 25px; border: 2px solid #e9ecef;">
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px; color: #DC143C; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa fa-images"></i> Imagens do Produto (até 5)
+                </h3>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="image_url" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                        <i class="fa fa-image"></i> Imagem Principal (Imagem 1):
+                    </label>
+                    <input type="url" id="image_url" name="image_url" value="{{ product.image_url or '' }}" placeholder="https://exemplo.com/imagem1.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+                    {% if product.image_url %}
+                    <div style="margin-top: 10px;">
+                        <img src="{{ product.image_url }}" alt="Preview" style="max-width: 150px; max-height: 150px; border-radius: 6px; border: 2px solid #ddd;">
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="image_url_2" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                        <i class="fa fa-image"></i> Imagem 2 (opcional):
+                    </label>
+                    <input type="url" id="image_url_2" name="image_url_2" value="{{ product.image_url_2 or '' }}" placeholder="https://exemplo.com/imagem2.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+                    {% if product.image_url_2 %}
+                    <div style="margin-top: 10px;">
+                        <img src="{{ product.image_url_2 }}" alt="Preview" style="max-width: 150px; max-height: 150px; border-radius: 6px; border: 2px solid #ddd;">
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="image_url_3" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                        <i class="fa fa-image"></i> Imagem 3 (opcional):
+                    </label>
+                    <input type="url" id="image_url_3" name="image_url_3" value="{{ product.image_url_3 or '' }}" placeholder="https://exemplo.com/imagem3.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+                    {% if product.image_url_3 %}
+                    <div style="margin-top: 10px;">
+                        <img src="{{ product.image_url_3 }}" alt="Preview" style="max-width: 150px; max-height: 150px; border-radius: 6px; border: 2px solid #ddd;">
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="image_url_4" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                        <i class="fa fa-image"></i> Imagem 4 (opcional):
+                    </label>
+                    <input type="url" id="image_url_4" name="image_url_4" value="{{ product.image_url_4 or '' }}" placeholder="https://exemplo.com/imagem4.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+                    {% if product.image_url_4 %}
+                    <div style="margin-top: 10px;">
+                        <img src="{{ product.image_url_4 }}" alt="Preview" style="max-width: 150px; max-height: 150px; border-radius: 6px; border: 2px solid #ddd;">
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="image_url_5" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                        <i class="fa fa-image"></i> Imagem 5 (opcional):
+                    </label>
+                    <input type="url" id="image_url_5" name="image_url_5" value="{{ product.image_url_5 or '' }}" placeholder="https://exemplo.com/imagem5.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+                    {% if product.image_url_5 %}
+                    <div style="margin-top: 10px;">
+                        <img src="{{ product.image_url_5 }}" alt="Preview" style="max-width: 150px; max-height: 150px; border-radius: 6px; border: 2px solid #ddd;">
+                    </div>
+                    {% endif %}
+                </div>
+                
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 6px; border-left: 4px solid #0066cc; margin-top: 20px;">
+                    <p style="margin: 0; font-size: 13px; color: #004085;">
+                        <i class="fa fa-info-circle"></i> 
+                        <strong>Dica:</strong> Cole as URLs das imagens hospedadas em serviços como Imgur, ImgBB ou seu próprio servidor. A primeira imagem será a imagem principal do produto.
+                    </p>
+                </div>
             </div>
             
             <div style="margin-bottom: 20px;">

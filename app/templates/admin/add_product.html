@@ -3,7 +3,7 @@
 {% block title %}Adicionar Produto - Admin{% endblock %}
 
 {% block content %}
-<div class="content_section" style="margin: 30px auto; max-width: 800px;">
+<div class="content_section" style="margin: 30px auto; max-width: 900px;">
     <h2 style="font-size: 28px; margin-bottom: 30px; color: #111;">
         <i class="fa fa-plus"></i> Adicionar Produto
     </h2>
@@ -46,9 +46,52 @@
                 </select>
             </div>
             
-            <div style="margin-bottom: 20px;">
-                <label for="image_url" style="display: block; margin-bottom: 5px; font-weight: 600;">URL da Imagem:</label>
-                <input type="url" id="image_url" name="image_url" placeholder="https://example.com/image.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+            <div style="background: #f8f9fa; padding: 25px; border-radius: 8px; margin-bottom: 25px; border: 2px solid #e9ecef;">
+                <h3 style="font-size: 18px; font-weight: 700; margin-bottom: 20px; color: #DC143C; display: flex; align-items: center; gap: 8px;">
+                    <i class="fa fa-images"></i> Imagens do Produto (até 5)
+                </h3>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="image_url" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                        <i class="fa fa-image"></i> Imagem Principal (Imagem 1):
+                    </label>
+                    <input type="url" id="image_url" name="image_url" placeholder="https://exemplo.com/imagem1.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="image_url_2" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                        <i class="fa fa-image"></i> Imagem 2 (opcional):
+                    </label>
+                    <input type="url" id="image_url_2" name="image_url_2" placeholder="https://exemplo.com/imagem2.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="image_url_3" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                        <i class="fa fa-image"></i> Imagem 3 (opcional):
+                    </label>
+                    <input type="url" id="image_url_3" name="image_url_3" placeholder="https://exemplo.com/imagem3.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="image_url_4" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                        <i class="fa fa-image"></i> Imagem 4 (opcional):
+                    </label>
+                    <input type="url" id="image_url_4" name="image_url_4" placeholder="https://exemplo.com/imagem4.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+                </div>
+                
+                <div style="margin-bottom: 15px;">
+                    <label for="image_url_5" style="display: block; margin-bottom: 5px; font-weight: 600;">
+                        <i class="fa fa-image"></i> Imagem 5 (opcional):
+                    </label>
+                    <input type="url" id="image_url_5" name="image_url_5" placeholder="https://exemplo.com/imagem5.jpg" style="width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 4px; font-size: 14px;">
+                </div>
+                
+                <div style="background: #e7f3ff; padding: 15px; border-radius: 6px; border-left: 4px solid #0066cc; margin-top: 20px;">
+                    <p style="margin: 0; font-size: 13px; color: #004085;">
+                        <i class="fa fa-info-circle"></i> 
+                        <strong>Dica:</strong> Cole as URLs das imagens hospedadas em serviços como Imgur, ImgBB ou seu próprio servidor. A primeira imagem será a imagem principal do produto.
+                    </p>
+                </div>
             </div>
             
             <div style="margin-bottom: 30px;">
