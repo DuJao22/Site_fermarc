@@ -41,10 +41,25 @@ class Product(db.Model):
     price = db.Column(db.Float, nullable=False)
     stock = db.Column(db.Integer, default=0)
     image_url = db.Column(db.String(500))
+    image_url_2 = db.Column(db.String(500))
+    image_url_3 = db.Column(db.String(500))
+    image_url_4 = db.Column(db.String(500))
+    image_url_5 = db.Column(db.String(500))
     category_id = db.Column(db.Integer, db.ForeignKey('category.id'))
     featured = db.Column(db.Boolean, default=False)
     active = db.Column(db.Boolean, default=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+    
+    def get_all_images(self):
+        images = []
+        for i in range(1, 6):
+            if i == 1:
+                url = self.image_url
+            else:
+                url = getattr(self, f'image_url_{i}', None)
+            if url:
+                images.append(url)
+        return images
 
 class Order(db.Model):
     id = db.Column(db.Integer, primary_key=True)
